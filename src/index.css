@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   SELF-HOSTED FONTS
+   Playfair Display + Poppins, Latin subset, WOFF2.
+   Extracted as real files so there's zero external font request.
+   ============================================================ */
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:500;font-display:swap;src:url("./assets/fonts/playfair-display-500-normal.woff2") format("woff2");}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:600;font-display:swap;src:url("./assets/fonts/playfair-display-600-normal.woff2") format("woff2");}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:700;font-display:swap;src:url("./assets/fonts/playfair-display-700-normal.woff2") format("woff2");}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:800;font-display:swap;src:url("./assets/fonts/playfair-display-800-normal.woff2") format("woff2");}
+@font-face{font-family:"Playfair Display";font-style:italic;font-weight:500;font-display:swap;src:url("./assets/fonts/playfair-display-500-italic.woff2") format("woff2");}
+@font-face{font-family:"Playfair Display";font-style:italic;font-weight:600;font-display:swap;src:url("./assets/fonts/playfair-display-600-italic.woff2") format("woff2");}
+@font-face{font-family:Poppins;font-style:normal;font-weight:300;font-display:swap;src:url("./assets/fonts/poppins-300-normal.woff2") format("woff2");}
+@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url("./assets/fonts/poppins-400-normal.woff2") format("woff2");}
+@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url("./assets/fonts/poppins-500-normal.woff2") format("woff2");}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url("./assets/fonts/poppins-600-normal.woff2") format("woff2");}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url("./assets/fonts/poppins-700-normal.woff2") format("woff2");}
+
+/* ============================================================
+   DESIGN TOKENS — palette extracted from the brand logo
+   (cream / ink / blush / petal) and the owner's portrait (navy).
+   Gold is a designed complement that bridges both.
+   ============================================================ */
+:root{
+  --page-bg: #FBF1E6;
+  --card-bg: #FFFFFF;
+  --scallop: #FBF1E6;
+}
+html.dark{
+  --page-bg: #0B0F1E;
+  --card-bg: #141A30;
+  --scallop: #0B0F1E;
+}
+
+*{ -webkit-tap-highlight-color: transparent; }
+html{ scroll-behavior: smooth; }
+body{ background: var(--page-bg); }
+::selection{ background:#DB9398; color:#17130F; }
+
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background: transparent; }
+::-webkit-scrollbar-thumb{ background:#DB9398; border-radius:99px; border:2px solid var(--page-bg); }
+html{ scrollbar-width: thin; scrollbar-color:#DB9398 transparent; }
+
+:focus-visible{ outline:2px solid #C6A15B; outline-offset:3px; border-radius:4px; }
+
+/* Section scroll offset for sticky nav */
+section[id]{ scroll-margin-top: 84px; }
+
+/* ---------- Loading screen ---------- */
+#loader{
+  position:fixed; inset:0; z-index:100; background:#FBF1E6;
+  display:flex; align-items:center; justify-content:center;
+  transition: opacity .6s ease, visibility .6s ease;
+}
+html.dark #loader{ background:#0B0F1E; }
+#loader img{ animation: loaderPulse 1.4s ease-in-out infinite; }
+#loader.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+@keyframes loaderPulse{
+  0%,100%{ transform:scale(1); opacity:1; }
+  50%{ transform:scale(1.06); opacity:.85; }
+}
+.loader-ring{
+  stroke-dasharray: 300; stroke-dashoffset:300;
+  animation: loaderRing 1.4s ease-in-out infinite;
+}
+@keyframes loaderRing{
+  0%{ stroke-dashoffset:300; }
+  50%{ stroke-dashoffset:0; }
+  100%{ stroke-dashoffset:-300; }
+}
+
+/* ---------- Scroll progress bar ---------- */
+#progress-bar{
+  position:fixed; top:0; left:0; height:3px; width:0%;
+  background: linear-gradient(90deg,#DB9398,#C6A15B);
+  z-index:60; transition: width .1s linear;
+}
+
+/* ---------- Glassmorphism ---------- */
+.glass{
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+html.dark .glass{
+  background: rgba(20,26,48,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+#nav.glass{ background: rgba(251,241,230,0.72); }
+html.dark #nav.glass{ background: rgba(11,15,30,0.72); }
+
+/* ---------- Scroll reveal ---------- */
+[data-reveal]{
+  opacity:0; transform: translateY(26px);
+  transition: opacity .8s cubic-bezier(.22,.7,.3,1), transform .8s cubic-bezier(.22,.7,.3,1);
+  transition-delay: calc(var(--i,0) * 90ms);
+}
+[data-reveal].in-view{ opacity:1; transform:none; }
+
+/* ---------- Floating ambient motion ---------- */
+@keyframes floatSlow{
+  0%,100%{ transform: translateY(0) rotate(var(--rot,-4deg)); }
+  50%{ transform: translateY(-14px) rotate(var(--rot,-4deg)); }
+}
+.float-anim{ animation: floatSlow 6s ease-in-out infinite; }
+
+@keyframes blobDrift{
+  0%,100%{ transform: translate(0,0) scale(1); }
+  50%{ transform: translate(20px,-30px) scale(1.08); }
+}
+.blob{ animation: blobDrift 12s ease-in-out infinite; }
+
+@keyframes pulseRing{
+  0%{ box-shadow: 0 0 0 0 rgba(219,147,152,0.55); }
+  100%{ box-shadow: 0 0 0 18px rgba(219,147,152,0); }
+}
+.pulse-ring::before{
+  content:''; position:absolute; inset:0; border-radius:9999px;
+  animation: pulseRing 2.2s cubic-bezier(.4,0,.6,1) infinite;
+}
+
+/* ---------- Receipt / ticket motif ---------- */
+.ticket{ position:relative; }
+.ticket::before{
+  content:''; position:absolute; top:-1px; left:0; right:0; height:14px;
+  background-image: radial-gradient(circle at 11px 0px, transparent 8px, var(--scallop) 8.5px);
+  background-size: 22px 14px; background-repeat: repeat-x;
+  background-position: center top;
+}
+.ticket-stub{ border-top: 1.5px dashed rgba(23,19,15,0.25); }
+html.dark .ticket-stub{ border-top-color: rgba(251,241,230,0.2); }
+
+/* ---------- Torn edge (CTA -> footer) ---------- */
+.torn-edge{ position:relative; }
+.torn-edge::after{
+  content:''; position:absolute; left:0; right:0; bottom:-1px; height:22px;
+  background:
+    linear-gradient(135deg, #0B0F1E 25%, transparent 25.5%) 0 0,
+    linear-gradient(-135deg, #0B0F1E 25%, transparent 25.5%) 0 0;
+  background-size: 22px 22px; background-repeat: repeat-x;
+}
+
+/* ---------- FAQ accordion (grid-rows trick) ---------- */
+.faq-panel{ display:grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.22,.7,.3,1); }
+.faq-panel > div{ overflow:hidden; }
+.faq-trigger[aria-expanded="true"] + .faq-panel{ grid-template-rows: 1fr; }
+.faq-trigger .chev{ transition: transform .35s ease; }
+.faq-trigger[aria-expanded="true"] .chev{ transform: rotate(180deg); }
+
+/* ---------- Misc ---------- */
+.text-gradient{
+  background: linear-gradient(100deg,#DB9398,#C6A15B 60%,#DB9398);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.nav-link{ position:relative; }
+.nav-link::after{
+  content:''; position:absolute; left:0; bottom:-4px; width:0; height:1.5px;
+  background:#C6A15B; transition: width .3s ease;
+}
+.nav-link:hover::after{ width:100%; }
+
+input::placeholder{ opacity:.55; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  html{ scroll-behavior:auto; }
+}
